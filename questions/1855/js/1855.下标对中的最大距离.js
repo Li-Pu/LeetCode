@@ -2,22 +2,22 @@
  * @param {number[]} nums1
  * @param {number[]} nums2
  * @return {number}
- * time: 4220ms space: 53.4MB
+ * time: 92ms space: 53.1MB
  */
 var maxDistance = function (nums1, nums2) {
     const len = Math.min(nums1.length, nums2.length);
     let res = 0;
-    for (let i = 0; i < len; i++) {
-        if (nums1[i] <= nums2[i]) {
-            for (let j = i + 1; j < nums2.length; j++) {
-                if (nums1[i] > nums2[j]) {
-                    break;
-                }
-                if (j - i > res) {
-                    res = j - i;
-                }
+    let left = 0, right = 0;
+    while (left < len) {
+        if (nums1[left] <= nums2[left]) {
+            right = Math.max(right, left + 1);
+            while (right < nums2.length && nums1[left] <= nums2[right]) {
+                right++;
             }
+            res = Math.max(res, right - left - 1)
+
         }
+        left++;
     }
     return res;
 };
