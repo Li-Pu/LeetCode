@@ -1,7 +1,7 @@
 /**
  * @param {number[][]} grid
  * @return {number}
- * time: 132ms space: 49.3MB
+ * time: 120ms space: 48.7MB
  */
 var shortestPathBinaryMatrix = function (grid) {
     const len = grid.length;
@@ -20,43 +20,22 @@ var shortestPathBinaryMatrix = function (grid) {
                 return start;
             }
 
-            const valueCheck = (a, b) => grid[a][b] === 0 && checks[a][b] === 0
-            const valueSet = (a, b) => {
-                cells.push([a, b])
-                checks[a][b] = 1
+            const update = (a, b) => {
+                const newRow = row + a, newCol = col + b;
+                if (newRow < 0 || newRow >= len) {
+                    return;
+                }
+                if (newCol < 0 || newCol >= len) {
+                    return;
+                }
+                if (grid[newRow][newCol] === 0 && checks[newRow][newCol] === 0) {
+                    cells.push([newRow, newCol]);
+                    checks[newRow][newCol] = 1;
+                }
             }
 
-            // 左上
-            if (row > 0 && col > 0 && valueCheck(row - 1, col - 1)) {
-                valueSet(row - 1, col - 1);
-            }
-            // 上
-            if (row > 0 && valueCheck(row - 1, col)) {
-                valueSet(row - 1, col)
-            }
-            // 左
-            if (col > 0 && valueCheck(row, col - 1)) {
-                valueSet(row, col - 1)
-            }
-            // 左下
-            if (row < len - 1 && col > 0 && valueCheck(row + 1, col - 1)) {
-                valueSet(row + 1, col - 1)
-            }
-            // 右上
-            if (row > 0 && col < len - 1 && valueCheck(row - 1, col + 1)) {
-                valueSet(row - 1, col + 1)
-            }
-            // 下
-            if (row < len - 1 && valueCheck(row + 1, col)) {
-                valueSet(row + 1, col)
-            }
-            // 右
-            if (col < len - 1 && valueCheck(row, col + 1)) {
-                valueSet(row, col + 1)
-            }
-            // 右下
-            if (row < len - 1 && col < len - 1 && valueCheck(row + 1, col + 1)) {
-                valueSet(row + 1, col + 1);
+            for (let t of [[-1, -1], [-1, 0], [0, -1], [1, -1], [-1, 1], [1, 0], [0, 1], [1, 1]]) {
+                update(...t)
             }
         }
         start++;
