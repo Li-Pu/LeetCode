@@ -1,34 +1,29 @@
 /**
  * @param {number} num
  * @return {number}
- * time: 60ms space: 41.5MB
+ * time: 60ms space: 41MB
  */
- var largestInteger = function (num) {
-    const odd = [], even = [], isOdd = [];
+var largestInteger = function (num) {
+    const digits = [];
 
     while (num > 0) {
-        const t = num % 10;
-        if (t % 2 === 0) {
-            even.push(t);
-            isOdd.push(false);
-        } else {
-            odd.push(t);
-            isOdd.push(true);
-        }
+        digits.push(num % 10);
         num = Math.floor(num / 10);
     }
 
-    odd.sort((a, b) => b - a)
-    even.sort((a, b) => b - a)
-    
-    let ret = 0;
-    while (isOdd.length > 0) {
-        const curIsOdd = isOdd.pop();
-        if (curIsOdd) {
-            ret = ret * 10 + odd.shift();
-        } else {
-            ret = ret * 10 + even.shift();
+    for (let i = 0; i < digits.length; i++) {
+        for (let j = i + 1; j < digits.length; j++) {
+            if ((digits[j] - digits[i]) % 2 === 0 && digits[j] < digits[i]) {
+                const t = digits[j];
+                digits[j] = digits[i];
+                digits[i] = t;
+            }
         }
+    }
+
+    let ret = 0;
+    while (digits.length > 0) {
+        ret = ret * 10 + digits.pop();
     }
 
     return ret;
