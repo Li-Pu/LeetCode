@@ -8,24 +8,22 @@
 /**
  * @param {ListNode} head
  * @return {ListNode}
- * time: 56ms space: 40.9MB
+ * time: 60ms space: 41.3MB
  */
 var middleNode = function (head) {
-    let count = 0;
-    let t = head;
-    while (t) {
-        count++;
-        t = t.next;
+    if (!head) {
+        return head;
+    }
+    let slow = head, fast = head.next
+
+    while (fast) {
+        fast = fast.next;
+        slow = slow.next;
+        if (fast) {
+            fast = fast.next;
+        }
     }
 
-    count = Math.floor(count / 2);
-    let newCount = 0;
-    t = head;
-    while (t && newCount !== count) {
-        newCount++;
-        t = t.next;
-    }
-
-    return t;
+    return slow;
 };
 
