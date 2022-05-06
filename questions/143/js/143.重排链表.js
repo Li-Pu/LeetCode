@@ -8,30 +8,48 @@
 /**
  * @param {ListNode} head
  * @return {void} Do not return anything, modify head in-place instead.
- * time: 868ms space: 49.1MB
+ * time: 72ms space: 48.8MB
  */
-var reorderList = function (head) {
-    const stack = [];
+ var reorderList = function (head) {
+    let fast = slow = head;
+    if (!head.next) {
+        return head;
+    }
+    fast = fast.next;
+
+    while (fast.next) {
+        fast = fast.next;
+        slow = slow.next;
+        if (fast.next) {
+            fast = fast.next;
+        }
+    }
+
+    fast = slow.next;
+    slow.next = null;    
+
+    if (fast && fast.next) {
+        let left = null, right = fast;
+
+        while (right) {
+            const t = right.next;
+            right.next = left;
+            left = right;
+            right = t;
+        }
+
+        fast = left
+    }
+
+    slow = head;
     let current = head;
-    while (current) {
-        stack.push(current);
-        current = current.next;
-    }
-
-    let left = stack.shift();
-    let right = stack.pop();
-    while (stack.length > 0) {
-        right.next = left.next;
-        left.next = right;
-        left = stack.shift();
-        right = stack.pop();
-    }
-
-    if (right) {
-        left.next = right;
-        right.next = null;
-    } else {
-        left.next = null;
+    while (fast) {
+        slow = slow.next;
+        current.next = fast;
+        current = fast;
+        fast = fast.next;
+        current.next = slow;
+        current = slow;
     }
 };
 
