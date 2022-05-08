@@ -1,26 +1,29 @@
+/*
+ * @lc app=leetcode.cn id=1 lang=javascript
+ *
+ * [1] 两数之和
+ */
+
+// @lc code=start
 /**
  * @param {number[]} nums
  * @param {number} target
  * @return {number[]}
- * time: 72ms space: 43.4MB
+ * time: 52ms space: 42.1MB
  */
 var twoSum = function (nums, target) {
     const len = nums.length;
+    const hashMap = new Map();
 
-    const numAndIndexs = nums.map((value, index) => [value, index]).sort((a, b) => a[0] - b[0]);
-    numAndIndexs
-
-    let left = 0, right = len - 1;
-    while (left < right) {
-        const sum = numAndIndexs[left][0] + numAndIndexs[right][0];
-        if (sum === target) {
-            return [numAndIndexs[left][1], numAndIndexs[right][1]];
-        } else if (sum < target) {
-            left++;
-        } else {
-            right--;
+    for (let i = 0; i < len; i++) {
+        const t = target - nums[i];
+        if (hashMap.has(t)) {
+            return [i, hashMap.get(t)]
         }
+        hashMap.set(nums[i], i);
     }
 
     return [-1, -1];
 };
+// @lc code=end
+
