@@ -2,21 +2,19 @@
  * @param {ListNode} headA
  * @param {ListNode} headB
  * @return {ListNode}
- * time: 96ms space: 49.4MB
+ * time: 88ms space: 48MB
  */
-var getIntersectionNode = function(headA, headB) {
-    const visited = new Set();
-    let ptr = headA;
-    while (ptr) {
-        visited.add(ptr);
-        ptr = ptr.next;
+var getIntersectionNode = function (headA, headB) {
+    if (!headA || !headB) {
+        return null;
     }
-    ptr = headB;
-    while (ptr) {
-        if (visited.has(ptr)) {
-            return ptr;
-        }
-        ptr = ptr.next;
+
+    let pA = headA,
+        pB = headB;
+    while (pA !== pB) {
+        pA = pA === null ? headB : pA.next;
+        pB = pB === null ? headA : pB.next;
     }
-    return null;
+
+    return pA;
 };
