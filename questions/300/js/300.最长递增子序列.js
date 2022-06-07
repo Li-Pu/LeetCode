@@ -1,7 +1,7 @@
 /**
  * @param {number[]} nums
  * @return {number}
- * time: 64ms space: 41.7MB
+ * time: 68ms space: 41.5MB
  */
 var lengthOfLIS = function (nums) {
     const len = nums.length;
@@ -9,11 +9,21 @@ var lengthOfLIS = function (nums) {
 
     for (let i = 0; i < len; i++) {
         const t = nums[i];
-        let index = dp.length;
-        while (index > 0 && dp[index - 1] >= t) {
-            index--;
+        if (dp.length === 0 || dp[dp.length - 1] < t) {
+            dp.push(t);
+        } else {
+            let left = 0,
+                right = dp.length - 1;
+            while (left < right) {
+                const mid = Math.floor((left + right) / 2);
+                if (dp[mid] >= t) {
+                    right = mid;
+                } else {
+                    left = mid + 1;
+                }
+            }
+            dp[left] = t;
         }
-        dp[index] = t;
     }
 
     return dp.length;
