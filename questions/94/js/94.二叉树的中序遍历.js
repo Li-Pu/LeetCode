@@ -9,21 +9,30 @@
 /**
  * @param {TreeNode} root
  * @return {number[]}
- * time: 60ms space: 40.9MB
+ * time: 56ms space: 41MB
  */
 var inorderTraversal = function (root) {
     const result = [];
-    const stack = [];
     let ptr = root;
-     
-    while (ptr || stack.length > 0) {
-        while (ptr) {
-            stack.push(ptr);
-            ptr = ptr.left;
+
+    while (ptr) {
+        if (ptr.left) {
+            let predecessor = ptr.left;
+            while (predecessor.right && predecessor.right !== ptr) {
+                predecessor = predecessor.right;
+            }
+            if (!predecessor.right) {
+                predecessor.right = ptr;
+                ptr = ptr.left;
+            } else {
+                result.push(ptr.val);
+                predecessor.right = null;
+                ptr = ptr.right;
+            }
+        } else {
+            result.push(ptr.val);
+            ptr = ptr.right;
         }
-        ptr = stack.pop();
-        result.push(ptr.val);
-        ptr = ptr.right;
     }
 
     return result;
