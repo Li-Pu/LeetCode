@@ -9,19 +9,21 @@
 /**
  * @param {TreeNode} root
  * @return {number[]}
- * time: 56ms space: 41.2MB
+ * time: 60ms space: 40.9MB
  */
 var inorderTraversal = function (root) {
     const result = [];
-
-    if (root) {
-        if (root.left) {
-            result.push(...inorderTraversal(root.left));
+    const stack = [];
+    let ptr = root;
+     
+    while (ptr || stack.length > 0) {
+        while (ptr) {
+            stack.push(ptr);
+            ptr = ptr.left;
         }
-        result.push(root.val);
-        if (root.right) {
-            result.push(...inorderTraversal(root.right));
-        }
+        ptr = stack.pop();
+        result.push(ptr.val);
+        ptr = ptr.right;
     }
 
     return result;
