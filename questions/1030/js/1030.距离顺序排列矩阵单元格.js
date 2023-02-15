@@ -4,17 +4,22 @@
  * @param {number} rCenter
  * @param {number} cCenter
  * @return {number[][]}
- * time: 140ms space: 48.9MB
+ * time: 108ms space: 48.1MB
  */
 var allCellsDistOrder = function (rows, cols, rCenter, cCenter) {
     const result = [];
-    for (let i = 0; i < rows; i++) {
-        const t1 = Math.abs(i - rCenter);
-        for (let j = 0; j < cols; j++) {
-            const t2 = Math.abs(j - cCenter);
-            result.push([i, j, t1 + t2]);
+    const xM = Math.max(rCenter, rows - rCenter);
+    const yM = Math.max(cCenter, cols - cCenter);
+    for (let i = 0; i <= xM + yM; i++) {
+        for (let j = Math.max(rCenter - i, 0); j < Math.min(rows, rCenter + i + 1); j++){
+            const t = i - Math.abs(j - rCenter);
+            if (cCenter - t >= 0) {
+                result.push([j, cCenter - t]);
+            }
+            if (t !== 0 && cCenter + t < cols) {
+                result.push([j, cCenter + t]);
+            }
         }
     }
-    result.sort((a, b) => a[2] - b[2]);
-    return result.map(([a, b, c]) => [a, b]);
+    return result;
 };
